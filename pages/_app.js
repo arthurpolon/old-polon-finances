@@ -1,19 +1,24 @@
 import { ChakraProvider } from "@chakra-ui/react"
 import Head from 'next/head'
-import ThemeButton from "../components/ThemeButton"
+import AppContextProvider from "../contexts/AppContext"
+
+import "@fontsource/poppins/200.css"
+import "@fontsource/poppins/400.css"
+import "@fontsource/poppins/600.css"
+import theme from '../styles/theme'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
+      <AppContextProvider>
+        <Head>
+          <title>Polon-Finance$</title>
+          <meta name="description" content="Homepage" />
+          <link rel="icon" href="/favicon.svg"/>
+        </Head>
 
-      <ThemeButton />
-      <Head>
-        <title>Polon-Finance$</title>
-        <meta name="description" content="Homepage" />
-        <link rel="icon" href="/favicon.svg"/>
-      </Head>
-
-      <Component {...pageProps} />
+        <Component {...pageProps} />
+      </AppContextProvider>
     </ChakraProvider>
   )
 }
