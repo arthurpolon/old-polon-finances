@@ -5,14 +5,9 @@ import {
    IconButton,
    Button,
    Stack,
-   Collapse,
-   Icon,
-   Link,
    Popover,
    PopoverTrigger,
-   PopoverContent,
    useColorModeValue,
-   useBreakpointValue,
    useDisclosure,
    Drawer,
    DrawerOverlay,
@@ -26,8 +21,6 @@ import {
 import {
    HamburgerIcon,
    CloseIcon,
-   ChevronDownIcon,
-   ChevronRightIcon,
 } from "@chakra-ui/icons";
 import Image from "next/image";
 import NextLink from "next/link";
@@ -92,7 +85,7 @@ export default function Navbar() {
                      width="300"
                      height="200"
                      />
-                     <Text mt="-10" fontWeight="thin"m fontSize="sm">by Arthur Polon</Text>
+                     <Text mt="-30px" fontWeight="thin" fontSize="sm">by Arthur Polon</Text>
                    </Flex>
                 </DrawerHeader>
                 <DrawerBody>
