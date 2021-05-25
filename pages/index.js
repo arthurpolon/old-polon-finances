@@ -16,21 +16,20 @@ import {
 import { FiLayout, FiDollarSign, FiLock } from "react-icons/fi";
 import NextLink from 'next/link'
 import Navbar from '../components/Navbar'
-import ThemeButton from '../components/ThemeButton'
+import Footer from '../components/Footer'
 
 export default function Home() {
   const { colorMode } = useColorMode()
   return (
     <>
       <Navbar />
-      <ThemeButton />
       
       {/* Hero */}
-      <Container maxW={'7xl'}>
+      <Container maxW={'7xl'} minH="calc(85vh - 107px)">
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
-          py={{ base: 20, md: 28 }}
+          pt={{ base: 10, md: 28 }}
           direction={{ base: 'column', md: 'row' }}
           >
           <Stack flex={1} spacing={{ base: 5, md: 10 }}>
@@ -144,6 +143,8 @@ export default function Home() {
           />
         </SimpleGrid>
       </Box>
+
+      <Footer />
     </>
   )
 }

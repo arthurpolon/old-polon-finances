@@ -3,6 +3,7 @@ import {
    Flex,
    Text,
    IconButton,
+   Icon,
    Button,
    Stack,
    Popover,
@@ -22,12 +23,14 @@ import {
    HamburgerIcon,
    CloseIcon,
 } from "@chakra-ui/icons";
+import {IoMdMoon} from 'react-icons/io'
+import {FiSun} from 'react-icons/fi'
 import Image from "next/image";
 import NextLink from "next/link";
 import { useColors } from "../contexts/ColorsContext";
 
 export default function Navbar() {
-   const { colorMode } = useColors();
+   const { colorMode, toggleColorMode } = useColors();
    const { isOpen, onToggle, onClose } = useDisclosure();
 
    return (
@@ -55,11 +58,7 @@ export default function Navbar() {
                <NextLink href="/">
                   <a>
                      <Image
-                        src={
-                           colorMode === "light"
-                              ? "/logo-light.svg"
-                              : "/logo-dark.svg"
-                        }
+                        src={useColorModeValue('/logo-light.svg', '/logo-dark.svg')}
                         width="200"
                         height="100"
                      />
@@ -70,69 +69,11 @@ export default function Navbar() {
                </Flex>
             </Flex>
 
-            {/* Mobile Drawer */}
-            <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
-              <DrawerOverlay display={{base: 'flex', md:'none'}} />
-              <DrawerContent display={{base: 'flex', md:'none'}} maxW="70%">
-                <DrawerHeader>
-                   <Flex direction="column">
-                     <Image
-                     src={
-                           colorMode === "light"
-                           ? "/logo-light.svg"
-                           : "/logo-dark.svg"
-                     }
-                     width="300"
-                     height="200"
-                     />
-                     <Text mt="-30px" fontWeight="thin" fontSize="sm">by Arthur Polon</Text>
-                   </Flex>
-                </DrawerHeader>
-                <DrawerBody>
-                  <VStack spacing="0" justify="space-evenly" boxSize="100%">
-                     <NextLink href="/app">
-                        <Button colorScheme="green" p="30px" fontWeight="medium">
-                           <a>Get Started</a>
-                        </Button>
-                     </NextLink>
-                     <VStack spacing="20px" align="start">
-                        {NAV_ITEMS.map((navItem, id) => {
-                           return(
-                              <NextLink href={navItem.href} key={id}>
-                                 <Box bg='rgba(0,0,0,0.1)' p="10px" borderRadius="5px" w={100} align="center">
-                                    <a>{navItem.label}</a>
-                                 </Box>
-                              </NextLink>
-                           )
-                        })}
-
-                     </VStack>
-
-                     <HStack spacing="50px" justify="space-between">
-                        <Button
-                           as={"a"}
-                           fontSize={"sm"}
-                           fontWeight={600}
-                           variant={"link"}
-                           href={"#"}
-                        >
-                           Sign In
-                        </Button>
-
-                        <Button
-                           fontSize={"sm"}
-                           fontWeight={600}
-                           colorScheme="green"
-                        >
-                           Sign Up
-                        </Button>
-                     </HStack>
-                  </VStack>
-                  
-                  
-                </DrawerBody>
-              </DrawerContent>
-            </Drawer>
+            <Box display={{base: 'none', md: 'block'}} ml="25px" mr={{md: '25px', lg: '50px'}}>
+               <Button onClick={toggleColorMode} p={0}>
+                  <Icon as={useColorModeValue(IoMdMoon, FiSun)} w={5} h={5} />
+               </Button>
+            </Box>
 
             {/* Sign Buttons */}
             <Stack
@@ -159,6 +100,71 @@ export default function Navbar() {
                   Sign Up
                </Button>
             </Stack>
+
+            {/* Mobile Drawer */}
+            <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
+              <DrawerOverlay display={{base: 'flex', md:'none'}} />
+              <DrawerContent display={{base: 'flex', md:'none'}} maxW="70%">
+                <DrawerHeader>
+                   <Flex direction="column">
+                     <Image
+                        src={
+                              colorMode === "light"
+                              ? "/logo-light.svg"
+                              : "/logo-dark.svg"
+                        }
+                        width="300"
+                        height="200"
+                     />
+                     <Text mt="-30px" fontWeight="thin" fontSize="sm">by Arthur Polon</Text>
+                   </Flex>
+                  <Flex direction="row-reverse" mt="10px">
+                     <Button onClick={toggleColorMode} p={0}>
+                        <Icon as={useColorModeValue(IoMdMoon, FiSun)} w={5} h={5} />
+                     </Button>
+                  </Flex>
+                </DrawerHeader>
+                <DrawerBody>
+                  <VStack spacing="0" justify="space-evenly" boxSize="100%">
+                     <NextLink href="/app">
+                        <Button colorScheme="green" p="30px" fontWeight="medium">
+                           <a>Get Started</a>
+                        </Button>
+                     </NextLink>
+                     <VStack spacing="20px" align="start">
+                        {NAV_ITEMS.map((navItem, id) => {
+                           return(
+                              <NextLink href={navItem.href} key={id}>
+                                 <Box bg='rgba(0,0,0,0.1)' p="10px" borderRadius="5px" w={100} align="center">
+                                    <a>{navItem.label}</a>
+                                 </Box>
+                              </NextLink>
+                           )
+                        })}
+                     </VStack>
+                     <HStack spacing="30px" justify="space-between">
+                        <Button
+                           as={"a"}
+                           fontSize={"sm"}
+                           fontWeight={600}
+                           variant={"link"}
+                           href={"#"}
+                        >
+                           Sign In
+                        </Button>
+
+                        <Button
+                           fontSize={"sm"}
+                           fontWeight={600}
+                           colorScheme="green"
+                        >
+                           Sign Up
+                        </Button>
+                     </HStack>
+                  </VStack>
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
          </Flex>
       </Box>
    );
@@ -175,6 +181,7 @@ const DesktopNav = () => {
                         p={2}
                         fontSize={"md"}
                         fontWeight={500}
+                        align="center"
                         color={useColorModeValue("gray.600", "gray.200")}
                         _hover={{
                            textDecoration: "none",
