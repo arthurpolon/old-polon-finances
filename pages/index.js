@@ -124,7 +124,7 @@ export default function Home() {
             icon={<Icon as={FiLayout} w={10} h={10} />}
             title={'Easy Interface'}
             text={
-              'THe simple look makes the app very simple to use in the day by day.'
+              'The clean look makes the app very simple to use in day by day.'
             }
           />
           <Feature
