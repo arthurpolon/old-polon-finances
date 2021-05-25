@@ -2,13 +2,15 @@ import {
   Box,
   chakra,
   Container,
+  Icon,
   Link,
   Stack,
   Text,
   useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaLinkedin } from 'react-icons/fa';
+import { AiFillGithub } from "react-icons/ai";
 import Image from 'next/image'
 import NextLink from 'next/link'
 
@@ -79,17 +81,14 @@ export default function Footer() {
           spacing={4}
           justify={{ base: 'center', md: 'space-between' }}
           align={{ base: 'center', md: 'center' }}>
-          <Text>© 2020 Chakra Templates. All rights reserved</Text>
+          <Link href="https://www.instagram.com/arthur_polon/" isExternal>@Arthur_Polon</Link>
           <Stack direction={'row'} spacing={6}>
-            <SocialButton label={'Twitter'} href={'#'}>
-              <FaTwitter />
-            </SocialButton>
-            <SocialButton label={'YouTube'} href={'#'}>
-              <FaYoutube />
-            </SocialButton>
-            <SocialButton label={'Instagram'} href={'#'}>
-              <FaInstagram />
-            </SocialButton>
+            <Link href="https://github.com/arthurpolon" isExternal>
+              <Icon as={AiFillGithub} boxSize={8} label="GitHub"/>
+            </Link>
+            <Link href="https://www.linkedin.com/in/arthur-polon-55a3b420a/" isExternal>
+              <Icon as={FaLinkedin} boxSize={8} label="LinkedIn"/>
+            </Link>
           </Stack>
         </Container>
       </Box>
