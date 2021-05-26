@@ -194,7 +194,7 @@ export default function Plans() {
           </PriceWrapper>
         </Stack>
       </Box>
-      <Footer />
+      <Footer position={{base: 'static', md: 'fixed'}} bottom="0" w="100%"/>
     </>
   );
 }
