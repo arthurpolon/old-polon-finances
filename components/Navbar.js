@@ -1,9 +1,11 @@
+import React, {useState} from 'react';
 import {
    Box,
    Flex,
    Text,
    IconButton,
    Icon,
+   Link,
    Button,
    Stack,
    Popover,
@@ -17,21 +19,36 @@ import {
    DrawerBody,
    VStack,
    HStack,
+   Modal,
+   ModalOverlay,
+   ModalContent,
+   ModalCloseButton,
+   FormControl,
+   FormLabel,
+   Input,
+   Heading,
 } from "@chakra-ui/react";
-
 import {
    HamburgerIcon,
    CloseIcon,
 } from "@chakra-ui/icons";
 import {IoMdMoon} from 'react-icons/io'
 import {FiSun} from 'react-icons/fi'
+import { FaGoogle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useColors } from "../contexts/ColorsContext";
+import { auth } from "../lib/firebase"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 export default function Navbar() {
+   const [ isSigningUp, setIsSigningUp ] = useState(false)
    const { colorMode, toggleColorMode } = useColors();
-   const { isOpen, onToggle, onClose } = useDisclosure();
+   const { isOpen: sideIsOpen, onToggle: sideOnToggle, onClose: sideOnClose } = useDisclosure();
+   const { isOpen: signIsOpen , onOpen: signOnOpen, onClose: signOnClose } = useDisclosure();
+
+   const [user] = useAuthState(auth)
 
    return (
       <Box>
@@ -42,9 +59,9 @@ export default function Navbar() {
                display={{ base: "flex", md: "none" }}
             >
                <IconButton
-                  onClick={onToggle}
+                  onClick={sideOnToggle}
                   icon={
-                     isOpen ? (
+                     sideIsOpen ? (
                         <CloseIcon w={3} h={3} />
                      ) : (
                         <HamburgerIcon w={5} h={5} />
@@ -76,33 +93,92 @@ export default function Navbar() {
             </Box>
 
             {/* Sign Buttons */}
-            <Stack
-               flex={{ base: 1, md: 0 }}
-               justify={"flex-end"}
-               direction={"row"}
-               spacing={10}
+            {!user &&
+               <Stack
+                  flex={{ base: 1, md: 0 }}
+                  justify={"flex-end"}
+                  direction={"row"}
+                  spacing={10}
+               >
+                  <Button
+                     as={"a"}
+                     fontSize={"md"}
+                     fontWeight={400}
+                     variant={"link"}
+                     href={"#"}
+                     onClick={() => {signOnOpen(); setIsSigningUp(false)}}
+                  >
+                     Sign In
+                  </Button>
+                  <Button
+                     display={{ base: "none", md: "inline-flex" }}
+                     fontSize={"md"}
+                     fontWeight={600}
+                     colorScheme="green"
+                     onClick={() => {signOnOpen(); setIsSigningUp(true)}}
+                  >
+                     Sign Up
+                  </Button>
+               </Stack>
+            }
+
+            {/* Sing User Modal */}
+            <Modal
+               isOpen={signIsOpen}
+               onClose={signOnClose}
             >
-               <Button
-                  as={"a"}
-                  fontSize={"md"}
-                  fontWeight={400}
-                  variant={"link"}
-                  href={"#"}
-               >
-                  Sign In
-               </Button>
-               <Button
-                  display={{ base: "none", md: "inline-flex" }}
-                  fontSize={"md"}
-                  fontWeight={600}
-                  colorScheme="green"
-               >
-                  Sign Up
-               </Button>
-            </Stack>
+               <ModalOverlay />
+               <ModalContent w="80%">
+                  <ModalCloseButton />
+                  <Flex p={10} direction="column">
+                     <VStack mx="auto" spacing={5} mb={8}>
+                        <Heading>{isSigningUp ? 'Sign Up' : 'Sign In'}</Heading>
+                        <Text align="center">
+                           {isSigningUp ? (
+                              <>Already have an account? <Link color="blue.400" onClick={() => setIsSigningUp(false)}>Sign In</Link></>
+                           ) : (
+                              <>Don't have an account? <Link color="blue.400" onClick={() => setIsSigningUp(true)}>Sign Up</Link></>
+                           )}
+                           
+                        </Text>
+                     </VStack>
+                     <form>
+                        <VStack mb={10} spacing={5}>
+                           <FormControl w="100%">
+                              <FormLabel display="none">Email</FormLabel>
+                              <Input type="email" variant="flushed" placeholder="Email" isRequired/>
+                           </FormControl>
+                           <FormControl>
+                              <FormLabel display="none" w="100%">Password</FormLabel>
+                              <Input type="password" variant="flushed" placeholder="Password" isRequired/>
+                           </FormControl>
+                           <FormControl display={isSigningUp ? 'block' : 'none'} >
+                              <FormLabel display="none"w="100%">Repeat Password</FormLabel>
+                              <Input type="password" variant="flushed" placeholder="Repeat Password" isRequired/>
+                           </FormControl>
+                           <Heading fontSize={'lg'}>Or</Heading>
+                           <Button>
+                              <Icon as={useColorModeValue(FcGoogle, FaGoogle)} w={useColorModeValue(8, 6)} h={useColorModeValue(8, 6)} mr={3}/>
+                              {isSigningUp ? 'Sign Up' : 'Sign In'} With Google
+                           </Button>
+                        </VStack>
+
+                        <Flex direction="row-reverse">
+                           <Button type="submit" colorScheme="green">
+                              {isSigningUp ? 'Sign Up' : 'Sign In'}
+                           </Button>
+                           <Button mr={6} onClick={signOnClose} variant="ghost">
+                              Close
+                           </Button>
+                        </Flex>
+                     </form>
+                  </Flex>
+                  
+               </ModalContent>
+            </Modal>
 
             {/* Mobile Drawer */}
-            <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
+            <Drawer placement="right" onClose={sideOnClose} isOpen={sideIsOpen}>
               <DrawerOverlay display={{base: 'flex', md:'none'}} />
               <DrawerContent display={{base: 'flex', md:'none'}} maxW="70%">
                 <DrawerHeader>
