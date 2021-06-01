@@ -39,8 +39,7 @@ import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useColors } from "../contexts/ColorsContext";
-import { auth } from "../lib/firebase"
-import { useAuthState } from "react-firebase-hooks/auth"
+import { useAuth } from "../contexts/AuthContext"
 
 export default function Navbar() {
    const [ isSigningUp, setIsSigningUp ] = useState(false)
@@ -48,7 +47,7 @@ export default function Navbar() {
    const { isOpen: sideIsOpen, onToggle: sideOnToggle, onClose: sideOnClose } = useDisclosure();
    const { isOpen: signIsOpen , onOpen: signOnOpen, onClose: signOnClose } = useDisclosure();
 
-   const [user] = useAuthState(auth)
+   const {user} = useAuth()
 
    return (
       <Box>
