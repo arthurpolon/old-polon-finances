@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react';
 
 import { FaLinkedin } from 'react-icons/fa';
-import { AiFillGithub } from "react-icons/ai";
-import Image from 'next/image'
-import NextLink from 'next/link'
+import { AiFillGithub } from 'react-icons/ai';
+import Image from 'next/image';
+import NextLink from 'next/link';
 
 export default function Footer(props) {
   return (
@@ -21,24 +21,29 @@ export default function Footer(props) {
       bg={useColorModeValue('white', 'gray.800')}
       color={useColorModeValue('gray.700', 'gray.200')}
       {...props}
-      >
+    >
       <Container
         as={Stack}
         maxW={'6xl'}
         py={4}
         spacing={4}
         justify={'center'}
-        align={'center'}>
-        <Image src={useColorModeValue('/logo-light.svg', '/logo-dark.svg')} width="180" height="100" />
+        align={'center'}
+      >
+        <Image
+          src={useColorModeValue('/logo-light.svg', '/logo-dark.svg')}
+          width='180'
+          height='100'
+        />
         <Stack direction={'row'} spacing={6}>
-          <NextLink href="/">
-            <Link as="a">Home</Link>
+          <NextLink href='/'>
+            <Link as='a'>Home</Link>
           </NextLink>
-          <NextLink href="/plans">
-            <Link as="a">Plans</Link>
+          <NextLink href='/plans'>
+            <Link as='a'>Plans</Link>
           </NextLink>
-          <NextLink href="/about">
-            <Link as="a">About Me</Link>
+          <NextLink href='/about'>
+            <Link as='a'>About Me</Link>
           </NextLink>
         </Stack>
       </Container>
@@ -46,7 +51,8 @@ export default function Footer(props) {
       <Box
         borderTopWidth={1}
         borderStyle={'solid'}
-        borderColor={useColorModeValue('gray.200', 'gray.700')}>
+        borderColor={useColorModeValue('gray.200', 'gray.700')}
+      >
         <Container
           as={Stack}
           maxW={'6xl'}
@@ -54,14 +60,20 @@ export default function Footer(props) {
           direction={{ base: 'column', md: 'row' }}
           spacing={4}
           justify={{ base: 'center', md: 'space-between' }}
-          align={{ base: 'center', md: 'center' }}>
-          <Link href="https://www.instagram.com/arthur_polon/" isExternal>@Arthur_Polon</Link>
+          align={{ base: 'center', md: 'center' }}
+        >
+          <Link href='https://www.instagram.com/arthur_polon/' isExternal>
+            @Arthur_Polon
+          </Link>
           <Stack direction={'row'} spacing={6}>
-            <Link href="https://github.com/arthurpolon" isExternal>
-              <Icon as={AiFillGithub} boxSize={8} label="GitHub"/>
+            <Link href='https://github.com/arthurpolon' isExternal>
+              <Icon as={AiFillGithub} boxSize={8} label='GitHub' />
             </Link>
-            <Link href="https://www.linkedin.com/in/arthur-polon-55a3b420a/" isExternal>
-              <Icon as={FaLinkedin} boxSize={8} label="LinkedIn"/>
+            <Link
+              href='https://www.linkedin.com/in/arthur-polon-55a3b420a/'
+              isExternal
+            >
+              <Icon as={FaLinkedin} boxSize={8} label='LinkedIn' />
             </Link>
           </Stack>
         </Container>
@@ -70,11 +82,7 @@ export default function Footer(props) {
   );
 }
 
-const SocialButton = ({
-  children,
-  label,
-  href,
-}) => {
+const SocialButton = ({ children, label, href }) => {
   return (
     <chakra.button
       bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
@@ -90,7 +98,8 @@ const SocialButton = ({
       transition={'background 0.3s ease'}
       _hover={{
         bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-      }}>
+      }}
+    >
       <VisuallyHidden>{label}</VisuallyHidden>
       {children}
     </chakra.button>
