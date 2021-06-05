@@ -37,6 +37,7 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import { useColors } from '../contexts/ColorsContext';
 import { useAuth } from '../contexts/AuthContext';
+import ToggleModeButton from './ToggleModeButton';
 
 export default function Navbar() {
   const [isSigningUp, setIsSigningUp] = useState(false);
@@ -90,15 +91,11 @@ export default function Navbar() {
           </Flex>
         </Flex>
 
-        <Box
+        <ToggleModeButton
           display={{ base: 'none', md: 'block' }}
           ml='25px'
           mr={{ md: '25px', lg: '50px' }}
-        >
-          <Button onClick={toggleColorMode} p={0}>
-            <Icon as={useColorModeValue(IoMdMoon, FiSun)} w={5} h={5} />
-          </Button>
-        </Box>
+        />
 
         {/* Sign Buttons */}
         {!user && (
