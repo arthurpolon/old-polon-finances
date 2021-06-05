@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Flex,
   Text,
   IconButton,
-  Icon,
-  Link,
   Button,
   Stack,
   Popover,
@@ -23,30 +21,25 @@ import {
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  Heading,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { IoMdMoon } from 'react-icons/io';
-import { FiSun } from 'react-icons/fi';
-import { FaGoogle } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import Image from 'next/image';
 import NextLink from 'next/link';
-import { useColors } from '../contexts/ColorsContext';
 import { useAuth } from '../contexts/AuthContext';
 import ToggleModeButton from './ToggleModeButton';
 import SignUser from './SignUser';
 
 export default function Navbar() {
   const [isSigningUp, setIsSigningUp] = useState(false);
-  const { colorMode, toggleColorMode } = useColors();
   const {
-    isOpen: sideIsOpen,
-    onToggle: sideOnToggle,
-    onClose: sideOnClose,
+    isOpen: mobileIsOpen,
+    onToggle: mobileOnToggle,
+    onClose: mobileOnClose,
   } = useDisclosure();
   const {
     isOpen: signIsOpen,
@@ -54,20 +47,22 @@ export default function Navbar() {
     onClose: signOnClose,
   } = useDisclosure();
 
-  const { user } = useAuth();
+  const { currentUser, signOutUser } = useAuth();
+
+  useEffect(() => {
+    if (currentUser) {
+      signOnClose();
+    }
+  }, [currentUser]);
 
   return (
     <Box>
       <Flex minH={'60px'} py={{ base: 2 }} px={{ base: 4 }} align={'center'}>
-        <Flex
-          flex={{ base: 1, md: 'auto' }}
-          ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}
-        >
+        <Flex ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
           <IconButton
-            onClick={sideOnToggle}
+            onClick={mobileOnToggle}
             icon={
-              sideIsOpen ? (
+              mobileIsOpen ? (
                 <CloseIcon w={3} h={3} />
               ) : (
                 <HamburgerIcon w={5} h={5} />
@@ -98,8 +93,33 @@ export default function Navbar() {
           mr={{ md: '25px', lg: '50px' }}
         />
 
-        {/* Sign Buttons */}
-        {!user && (
+        {currentUser ? (
+          <Box display={{ base: 'none', md: 'block' }}>
+            <Popover>
+              <PopoverTrigger>
+                <Button px={5} py={10}>
+                  <VStack>
+                    <Text fontWeight='md'>Logged in as:</Text>
+                    <Text>{currentUser.email}</Text>
+                  </VStack>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader>User Information</PopoverHeader>
+                <PopoverBody>
+                  <VStack spacing={5} my={5}>
+                    <Text>Email: {currentUser.email}</Text>
+                    <Button onClick={signOutUser} colorScheme='red'>
+                      Log Out
+                    </Button>
+                  </VStack>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Box>
+        ) : (
           <Stack
             flex={{ base: 1, md: 0 }}
             justify={'flex-end'}
@@ -139,20 +159,18 @@ export default function Navbar() {
           <ModalOverlay />
           <ModalContent w='80%'>
             <ModalCloseButton />
-            <SignUser />
+            <SignUser initialState={isSigningUp} />
           </ModalContent>
         </Modal>
 
         {/* Mobile Drawer */}
-        <Drawer placement='right' onClose={sideOnClose} isOpen={sideIsOpen}>
+        <Drawer placement='right' onClose={mobileOnClose} isOpen={mobileIsOpen}>
           <DrawerOverlay display={{ base: 'flex', md: 'none' }} />
           <DrawerContent display={{ base: 'flex', md: 'none' }} maxW='70%'>
             <DrawerHeader>
               <Flex direction='column'>
                 <Image
-                  src={
-                    colorMode === 'light' ? '/logo-light.svg' : '/logo-dark.svg'
-                  }
+                  src={useColorModeValue('/logo-light.svg', '/logo-dark.svg')}
                   width='300'
                   height='200'
                 />
@@ -161,9 +179,7 @@ export default function Navbar() {
                 </Text>
               </Flex>
               <Flex direction='row-reverse' mt='10px'>
-                <Button onClick={toggleColorMode} p={0}>
-                  <Icon as={useColorModeValue(IoMdMoon, FiSun)} w={5} h={5} />
-                </Button>
+                <ToggleModeButton />
               </Flex>
             </DrawerHeader>
             <DrawerBody>
@@ -191,19 +207,48 @@ export default function Navbar() {
                   })}
                 </VStack>
                 <HStack spacing='30px' justify='space-between'>
-                  <Button
-                    as={'a'}
-                    fontSize={'sm'}
-                    fontWeight={600}
-                    variant={'link'}
-                    href={'#'}
-                  >
-                    Sign In
-                  </Button>
+                  {currentUser ? (
+                    <VStack px={5} py={3} borderRadius={5}>
+                      <Flex w='100%' direction='column'>
+                        <Text fontSize='sm'>Logged in as: </Text>
+                        <Text fontWeight='bold' fontSize='sm'>
+                          {' '}
+                          {currentUser.email}{' '}
+                        </Text>
+                      </Flex>
 
-                  <Button fontSize={'sm'} fontWeight={600} colorScheme='green'>
-                    Sign Up
-                  </Button>
+                      <Button onClick={signOutUser} size='sm' colorScheme='red'>
+                        Log Out
+                      </Button>
+                    </VStack>
+                  ) : (
+                    <>
+                      <Button
+                        as={'a'}
+                        fontSize={'sm'}
+                        fontWeight={600}
+                        variant={'link'}
+                        href={'#'}
+                        onClick={() => {
+                          signOnOpen();
+                          setIsSigningUp(false);
+                        }}
+                      >
+                        Sign In
+                      </Button>
+                      <Button
+                        fontSize={'sm'}
+                        fontWeight={600}
+                        colorScheme='green'
+                        onClick={() => {
+                          signOnOpen();
+                          setIsSigningUp(true);
+                        }}
+                      >
+                        Sign Up
+                      </Button>
+                    </>
+                  )}
                 </HStack>
               </VStack>
             </DrawerBody>
