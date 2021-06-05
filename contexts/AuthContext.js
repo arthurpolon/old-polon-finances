@@ -15,16 +15,28 @@ function AuthContextProvider({ children }) {
   });
 
   const createUser = (email, password) => {
-    auth.createUserWithEmailAndPassword(email, password);
+    setLoading(true);
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(setLoading(false))
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   };
 
   const signInUser = (email, password) => {
-    auth.signInWithEmailAndPassword(email, password).catch((err) => {
-      setError(err.message);
-      setTimeout(() => {
-        setError(null);
-      }, 3000);
-    });
+    setLoading(true);
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(setLoading(false))
+      .catch((err) => {
+        setLoading(false);
+        setError(err.message);
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+      });
   };
 
   const signOutUser = () => {
