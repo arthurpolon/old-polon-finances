@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { auth } from '../lib/firebase';
+import { auth, googleProvider } from '../lib/firebase';
 
 const AuthContext = createContext();
 
@@ -7,6 +7,7 @@ function AuthContextProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       setCurrentUser(user);
@@ -46,6 +47,20 @@ function AuthContextProvider({ children }) {
       .then(setCurrentUser(null));
   };
 
+  const signInWithGoogle = () => {
+    setLoading(true);
+    auth
+      .signInWithPopup(googleProvider)
+      .then((result) => {
+        setCurrentUser(result.user);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -55,6 +70,7 @@ function AuthContextProvider({ children }) {
         createUser,
         signInUser,
         signOutUser,
+        signInWithGoogle,
         setError,
       }}
     >
