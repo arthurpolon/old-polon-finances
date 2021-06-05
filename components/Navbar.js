@@ -38,6 +38,7 @@ import NextLink from 'next/link';
 import { useColors } from '../contexts/ColorsContext';
 import { useAuth } from '../contexts/AuthContext';
 import ToggleModeButton from './ToggleModeButton';
+import SignUser from './SignUser';
 
 export default function Navbar() {
   const [isSigningUp, setIsSigningUp] = useState(false);
@@ -138,88 +139,7 @@ export default function Navbar() {
           <ModalOverlay />
           <ModalContent w='80%'>
             <ModalCloseButton />
-            <Flex p={10} direction='column'>
-              <VStack mx='auto' spacing={5} mb={8}>
-                <Heading>{isSigningUp ? 'Sign Up' : 'Sign In'}</Heading>
-                <Text align='center'>
-                  {isSigningUp ? (
-                    <>
-                      Already have an account?{' '}
-                      <Link
-                        color='blue.400'
-                        onClick={() => setIsSigningUp(false)}
-                      >
-                        Sign In
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      Don't have an account?{' '}
-                      <Link
-                        color='blue.400'
-                        onClick={() => setIsSigningUp(true)}
-                      >
-                        Sign Up
-                      </Link>
-                    </>
-                  )}
-                </Text>
-              </VStack>
-              <form>
-                <VStack mb={10} spacing={5}>
-                  <FormControl w='100%'>
-                    <FormLabel display='none'>Email</FormLabel>
-                    <Input
-                      type='email'
-                      variant='flushed'
-                      placeholder='Email'
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel display='none' w='100%'>
-                      Password
-                    </FormLabel>
-                    <Input
-                      type='password'
-                      variant='flushed'
-                      placeholder='Password'
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl display={isSigningUp ? 'block' : 'none'}>
-                    <FormLabel display='none' w='100%'>
-                      Repeat Password
-                    </FormLabel>
-                    <Input
-                      type='password'
-                      variant='flushed'
-                      placeholder='Repeat Password'
-                      isRequired
-                    />
-                  </FormControl>
-                  <Heading fontSize={'lg'}>Or</Heading>
-                  <Button>
-                    <Icon
-                      as={useColorModeValue(FcGoogle, FaGoogle)}
-                      w={useColorModeValue(8, 6)}
-                      h={useColorModeValue(8, 6)}
-                      mr={3}
-                    />
-                    {isSigningUp ? 'Sign Up' : 'Sign In'} With Google
-                  </Button>
-                </VStack>
-
-                <Flex direction='row-reverse'>
-                  <Button type='submit' colorScheme='green'>
-                    {isSigningUp ? 'Sign Up' : 'Sign In'}
-                  </Button>
-                  <Button mr={6} onClick={signOnClose} variant='ghost'>
-                    Close
-                  </Button>
-                </Flex>
-              </form>
-            </Flex>
+            <SignUser />
           </ModalContent>
         </Modal>
 
