@@ -1,19 +1,20 @@
 import {
   Flex,
-  useColorModeValue,
   Image,
   HStack,
   VStack,
   Box,
   Icon,
-  Heading,
   Text,
+  Stack,
 } from '@chakra-ui/react';
 import { FiLogIn, FiLogOut, FiDollarSign } from 'react-icons/fi';
+import ToggleModeButton from '../../components/ToggleModeButton';
 
 const App = () => {
   return (
     <Box minH='100vh' minW='100vw' bg='#ededed'>
+      <ToggleModeButton position='fixed' top={5} left={5} />
       {/* Header */}
       <Flex
         background='green.900'
@@ -23,8 +24,8 @@ const App = () => {
         pb={40}
       >
         <Image
-          src={useColorModeValue('/logo-dark.svg', '/logo-light.svg')}
-          width={400}
+          src={'/logo-dark.svg'}
+          width={{ base: 250, md: 400 }}
           height={130}
         />
       </Flex>
@@ -32,55 +33,71 @@ const App = () => {
       {/* Page Content */}
       <Flex w={'50vw'} mx='auto'>
         {/* Cards */}
-        <HStack mt={-24} justify='space-around' w='100%'>
+        <Stack
+          direction={{ base: 'column', md: 'row' }}
+          mx='auto'
+          mt={-24}
+          justify='space-around'
+          align='center'
+          w='100%'
+          spacing={10}
+          overflow='visible'
+        >
+          {/* Income Card  */}
           <VStack
             bg='white'
-            p={35}
+            p={{ base: 25, md: 35 }}
             align='flex-start'
             borderRadius={5}
             minW={275}
           >
             <HStack justify='space-between' w='100%'>
-              <Text fontSize='3xl' color='teal.900'>
+              <Text fontSize={{ base: '2xl', md: '3xl' }} color='teal.900'>
                 Entradas
               </Text>
-              <Icon as={FiLogIn} color='green' w={8} h={8} />
+              <Icon as={FiLogIn} color='green' w={6} h={6} />
             </HStack>
-            <Text fontSize='4xl'>R$ 50,00</Text>
+            <Text fontSize={{ base: '3xl', md: '4xl' }}>R$ 50,00</Text>
           </VStack>
+          {/* Outcome Card  */}
           <VStack
             bg='white'
-            p={35}
+            p={{ base: 25, md: 35 }}
             align='flex-start'
             borderRadius={5}
             minW={275}
           >
             <HStack justify='space-between' w='100%'>
-              <Text fontSize='3xl' color='teal.900'>
+              <Text fontSize={{ base: '2xl', md: '3xl' }} color='teal.900'>
                 Saídas
               </Text>
-              <Icon as={FiLogOut} color='red' w={8} h={8} />
+              <Icon as={FiLogOut} color='red' w={6} h={6} />
             </HStack>
-            <Text fontSize='4xl'>R$ 100,00</Text>
+            <Text fontSize={{ base: '3xl', md: '4xl' }}>R$ 100,00</Text>
           </VStack>
+          {/* Total Card */}
           <VStack
             bg='green.500'
-            p={35}
+            p={{ base: 25, md: 35 }}
             align='flex-start'
             borderRadius={5}
             minW={275}
           >
             <HStack justify='space-between' w='100%'>
-              <Text fontSize='3xl' color='white'>
+              <Text fontSize={{ base: '2xl', md: '3xl' }} color='white'>
                 Total
               </Text>
-              <Icon as={FiDollarSign} color='white' w={8} h={8} />
+              <Icon as={FiDollarSign} color='white' w={6} h={6} />
             </HStack>
-            <Text fontSize='4xl' color='white' bold isTruncated>
+            <Text
+              fontSize={{ base: '3xl', md: '4xl' }}
+              color='white'
+              isTruncated
+            >
               R$ -50,00
             </Text>
           </VStack>
-        </HStack>
+        </Stack>
       </Flex>
     </Box>
   );
