@@ -11,17 +11,33 @@ import {
   Link,
   VStack,
   useColorModeValue,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 
 import { useForm } from 'react-hook-form';
 import { FaGoogle } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
+import { useAuth } from '../contexts/AuthContext';
 
 // import { Container } from './styles';
 
-const SignUser = () => {
-  const [isSigningUp, setIsSigningUp] = useState(false);
+const SignUser = ({ initialState }) => {
+  const [isSigningUp, setIsSigningUp] = useState(initialState);
   const { register, handleSubmit } = useForm();
+  const { createUser, signInUser, loading, error, setError } = useAuth();
+
+  const onSubmit = ({ email, password, repeatPassword }) => {
+    if (isSigningUp) {
+      if (password.trim() === repeatPassword.trim()) {
+        createUser(email, password);
+      } else {
+        setError('Passwords does not match.');
+      }
+    } else {
+      signInUser(email, password);
+    }
+  };
 
   return (
     <Flex p={10} direction='column'>
@@ -45,9 +61,9 @@ const SignUser = () => {
           )}
         </Text>
       </VStack>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <VStack mb={10} spacing={5}>
-          <Button>
+          <Button isLoading={loading}>
             <Icon
               as={useColorModeValue(FcGoogle, FaGoogle)}
               w={useColorModeValue(8, 6)}
@@ -60,6 +76,7 @@ const SignUser = () => {
           <FormControl w='100%'>
             <FormLabel display='none'>Email</FormLabel>
             <Input
+              isDisabled={loading}
               {...register('email')}
               type='email'
               variant='flushed'
@@ -72,6 +89,7 @@ const SignUser = () => {
               Password
             </FormLabel>
             <Input
+              isDisabled={loading}
               {...register('password')}
               type='password'
               variant='flushed'
@@ -79,18 +97,27 @@ const SignUser = () => {
               isRequired
             />
           </FormControl>
-          <FormControl>
-            <FormLabel display='none' w='100%'>
-              Repeat Password
-            </FormLabel>
-            <Input
-              {...register('repeat-password')}
-              type='password'
-              variant='flushed'
-              placeholder='Repeat Password'
-              isRequired
-            />
-          </FormControl>
+          {isSigningUp && (
+            <FormControl>
+              <FormLabel display='none' w='100%'>
+                Repeat Password
+              </FormLabel>
+              <Input
+                isDisabled={loading}
+                {...register('repeatPassword')}
+                type='password'
+                variant='flushed'
+                placeholder='Repeat Password'
+                isRequired
+              />
+            </FormControl>
+          )}
+          {error && (
+            <Alert status='error'>
+              <AlertIcon />
+              <Text align='center'>{error}</Text>
+            </Alert>
+          )}
         </VStack>
 
         <Flex direction='row-reverse'>
