@@ -8,13 +8,24 @@ import {
   Text,
   Stack,
 } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
 import { FiLogIn, FiLogOut, FiDollarSign } from 'react-icons/fi';
 import ToggleModeButton from '../../components/ToggleModeButton';
+import { useColors } from '../../contexts/ColorsContext';
 
 const App = () => {
+  const { colorMode, toggleColorMode } = useColors();
+
+  console.log(colorMode);
+  useEffect(() => {
+    if (colorMode === 'dark') {
+      toggleColorMode();
+      console.log(`Inside effect: color changed to ${colorMode}`);
+    }
+  }, []);
+
   return (
     <Box minH='100vh' minW='100vw' bg='#ededed'>
-      <ToggleModeButton position='fixed' top={5} left={5} />
       {/* Header */}
       <Flex
         background='green.900'
