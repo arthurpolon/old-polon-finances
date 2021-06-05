@@ -25,7 +25,8 @@ import { useAuth } from '../contexts/AuthContext';
 const SignUser = ({ initialState }) => {
   const [isSigningUp, setIsSigningUp] = useState(initialState);
   const { register, handleSubmit } = useForm();
-  const { createUser, signInUser, loading, error, setError } = useAuth();
+  const { createUser, signInUser, signInWithGoogle, loading, error, setError } =
+    useAuth();
 
   const onSubmit = ({ email, password, repeatPassword }) => {
     if (isSigningUp) {
@@ -63,7 +64,7 @@ const SignUser = ({ initialState }) => {
       </VStack>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack mb={10} spacing={5}>
-          <Button isLoading={loading}>
+          <Button isLoading={loading} onClick={signInWithGoogle}>
             <Icon
               as={useColorModeValue(FcGoogle, FaGoogle)}
               w={useColorModeValue(8, 6)}
@@ -121,7 +122,7 @@ const SignUser = ({ initialState }) => {
         </VStack>
 
         <Flex direction='row-reverse'>
-          <Button type='submit' colorScheme='green'>
+          <Button type='submit' colorScheme='green' isLoading={loading}>
             {isSigningUp ? 'Sign Up' : 'Sign In'}
           </Button>
         </Flex>
