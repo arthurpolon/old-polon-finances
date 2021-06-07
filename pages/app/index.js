@@ -3,14 +3,29 @@ import {
   Image,
   HStack,
   VStack,
+  Button,
   Box,
   Icon,
   Text,
   Stack,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  VisuallyHidden,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
-import { FiLogIn, FiLogOut, FiDollarSign } from 'react-icons/fi';
-import ToggleModeButton from '../../components/ToggleModeButton';
+import {
+  FiLogIn,
+  FiLogOut,
+  FiDollarSign,
+  FiEdit,
+  FiTrash2,
+} from 'react-icons/fi';
 import { useColors } from '../../contexts/ColorsContext';
 
 const App = () => {
@@ -42,16 +57,15 @@ const App = () => {
       </Flex>
 
       {/* Page Content */}
-      <Flex w={'50vw'} mx='auto'>
+      <Flex w={{ base: '80vw', md: '50vw' }} mx='auto' direction='column'>
         {/* Cards */}
         <Stack
           direction={{ base: 'column', md: 'row' }}
           mx='auto'
-          mt={-24}
-          justify='space-around'
+          mt={{ base: -28, md: -24 }}
+          justify='space-between'
           align='center'
           w='100%'
-          spacing={10}
           overflow='visible'
         >
           {/* Income Card  */}
@@ -109,6 +123,63 @@ const App = () => {
             </Text>
           </VStack>
         </Stack>
+        {/* Income & Outcome Buttons */}
+        <HStack
+          mt={6}
+          w={'100%'}
+          justify={{ base: 'space-around', md: 'flex-start' }}
+        >
+          <Button colorScheme='green' fontWeight='medium'>
+            + Add Income
+          </Button>
+          <Button colorScheme='red' fontWeight='medium'>
+            - Add Outcome
+          </Button>
+        </HStack>
+        {/* Table */}
+        <Table variant='unstyled' w='100%' mt={6} bg='white' borderRadius={4}>
+          <Thead>
+            <Tr>
+              <Th textAlign='center'>Descrição</Th>
+              <Th textAlign='center'>Valor</Th>
+              <Th textAlign='center'>Data</Th>
+              <Th textAlign='center' isNumeric>
+                <VisuallyHidden>Edit Button</VisuallyHidden>
+              </Th>
+              <Th textAlign='center' isNumeric>
+                <VisuallyHidden>Delete Button</VisuallyHidden>
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <Tr>
+              <Td textAlign='center'>Veterinário Pepeu</Td>
+              <Td textAlign='center' color='red'>
+                - R$ 100,00
+              </Td>
+              <Td textAlign='center'>18/05/2020</Td>
+              <Td textAlign='center' isNumeric>
+                <Icon as={FiEdit} h={6} w={6} />
+              </Td>
+              <Td textAlign='center' isNumeric>
+                <Icon as={FiTrash2} h={7} w={7} color='red' />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td textAlign='center'>Venda salgadinho</Td>
+              <Td textAlign='center' color='green'>
+                + R$ 50,00
+              </Td>
+              <Td textAlign='center'>20/05/2020</Td>
+              <Td textAlign='center' isNumeric>
+                <Icon as={FiEdit} h={6} w={6} />
+              </Td>
+              <Td textAlign='center' isNumeric>
+                <Icon as={FiTrash2} h={7} w={7} color='red' />
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
       </Flex>
     </Box>
   );
