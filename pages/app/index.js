@@ -11,11 +11,9 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   VisuallyHidden,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
@@ -26,23 +24,38 @@ import {
   FiEdit,
   FiTrash2,
   FiChevronDown,
+  FiArrowLeftCircle,
 } from 'react-icons/fi';
+import NextLink from 'next/link';
 import { useColors } from '../../contexts/ColorsContext';
+import UserInfo from '../../components/UserInfo';
 
 const App = () => {
   const { colorMode, toggleColorMode } = useColors();
-
-  console.log(colorMode);
   useEffect(() => {
     if (colorMode === 'dark') {
       toggleColorMode();
-      console.log(`Inside effect: color changed to ${colorMode}`);
     }
   }, []);
 
   return (
     <Box minH='100vh' minW='100vw' bg='#ededed'>
       {/* Header */}
+      <NextLink href='/'>
+        <Button
+          variant='ghost'
+          color='white'
+          colorScheme='green'
+          _hover='none'
+          position='absolute'
+          top={10}
+          left={10}
+        >
+          <Icon as={FiArrowLeftCircle} boxSize={6} mr={2} />
+          Back to Home
+        </Button>
+      </NextLink>
+      <UserInfo position='absolute' top={10} right={10} />
       <Flex
         background='green.900'
         justify='center'
@@ -56,7 +69,6 @@ const App = () => {
           height={130}
         />
       </Flex>
-
       {/* Page Content */}
       <Flex w={{ base: '80vw', md: '50vw' }} mx='auto' direction='column'>
         {/* Cards */}
