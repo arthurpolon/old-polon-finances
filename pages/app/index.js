@@ -25,6 +25,7 @@ import {
   FiDollarSign,
   FiEdit,
   FiTrash2,
+  FiChevronDown,
 } from 'react-icons/fi';
 import { useColors } from '../../contexts/ColorsContext';
 
@@ -128,12 +129,17 @@ const App = () => {
           mt={6}
           w={'100%'}
           justify={{ base: 'space-around', md: 'flex-start' }}
+          spacing={6}
         >
           <Button colorScheme='green' fontWeight='medium'>
             + Add Income
           </Button>
           <Button colorScheme='red' fontWeight='medium'>
             - Add Outcome
+          </Button>
+          <Button bgColor='white' fontWeight='bold'>
+            Filter
+            <Icon as={FiChevronDown} ml={1} />
           </Button>
         </HStack>
         {/* Table */}
