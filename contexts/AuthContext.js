@@ -6,11 +6,15 @@ const AuthContext = createContext();
 function AuthContextProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [feedback, setFeedback] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
 
   auth.onAuthStateChanged((user) => {
     if (user) {
       setCurrentUser(user);
+      setError(null);
+    } else {
+      setCurrentUser(null);
       setError(null);
     }
   });
@@ -61,15 +65,31 @@ function AuthContextProvider({ children }) {
       });
   };
 
+  const passwordResetEmail = () => {
+    auth
+      .sendPasswordResetEmail(currentUser.email)
+      .then(() => {
+        setFeedback(
+          'Redefinition email sent. Check your mailbox to redefine password.'
+        );
+        setTimeout(() => {
+          setFeedback(null);
+        }, 5000);
+      })
+      .catch(() => console.log.log(err.message));
+  };
+
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         loading,
         error,
+        feedback,
         createUser,
         signInUser,
         signOutUser,
+        passwordResetEmail,
         signInWithGoogle,
         setError,
       }}
