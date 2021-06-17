@@ -33,6 +33,7 @@ import NextLink from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import ToggleModeButton from './ToggleModeButton';
 import SignUser from './SignUser';
+import UserInfo from './UserInfo';
 
 export default function Navbar() {
   const [isSigningUp, setIsSigningUp] = useState(false);
@@ -94,31 +95,7 @@ export default function Navbar() {
         />
 
         {currentUser ? (
-          <Box display={{ base: 'none', md: 'block' }}>
-            <Popover>
-              <PopoverTrigger>
-                <Button px={5} py={10}>
-                  <VStack>
-                    <Text fontWeight='md'>Logged in as:</Text>
-                    <Text>{currentUser.email}</Text>
-                  </VStack>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader>User Information</PopoverHeader>
-                <PopoverBody>
-                  <VStack spacing={5} my={5}>
-                    <Text>Email: {currentUser.email}</Text>
-                    <Button onClick={signOutUser} colorScheme='red'>
-                      Log Out
-                    </Button>
-                  </VStack>
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
-          </Box>
+          <UserInfo display={{ base: 'none', md: 'block' }} />
         ) : (
           <Stack
             flex={{ base: 1, md: 0 }}
@@ -208,19 +185,7 @@ export default function Navbar() {
                 </VStack>
                 <HStack spacing='30px' justify='space-between'>
                   {currentUser ? (
-                    <VStack px={5} py={3} borderRadius={5}>
-                      <Flex w='100%' direction='column'>
-                        <Text fontSize='sm'>Logged in as: </Text>
-                        <Text fontWeight='bold' fontSize='sm'>
-                          {' '}
-                          {currentUser.email}{' '}
-                        </Text>
-                      </Flex>
-
-                      <Button onClick={signOutUser} size='sm' colorScheme='red'>
-                        Log Out
-                      </Button>
-                    </VStack>
+                    <UserInfo />
                   ) : (
                     <>
                       <Button
