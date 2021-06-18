@@ -15,15 +15,18 @@ function AuthContextProvider({ children }) {
       setError(null);
     } else {
       setCurrentUser(null);
-      setError(null);
     }
   });
 
-  const createUser = (email, password) => {
+  const createUser = (email, password, name) => {
     setLoading(true);
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then(setLoading(false))
+      .then((userCredential) => {
+        userCredential.user
+          .updateProfile({ displayName: name })
+          .catch((err) => console.log(err.message));
+      })
       .catch((err) => {
         setError(err.message);
         setLoading(false);
