@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Flex,
@@ -28,10 +28,10 @@ const SignUser = ({ initialState }) => {
   const { createUser, signInUser, signInWithGoogle, loading, error, setError } =
     useAuth();
 
-  const onSubmit = ({ email, password, repeatPassword }) => {
+  const onSubmit = ({ email, password, repeatPassword, name }) => {
     if (isSigningUp) {
       if (password.trim() === repeatPassword.trim()) {
-        createUser(email, password);
+        createUser(email, password, name);
       } else {
         setError('Passwords does not match.');
       }
@@ -40,8 +40,12 @@ const SignUser = ({ initialState }) => {
     }
   };
 
+  useEffect(() => {
+    setError(null);
+  }, [isSigningUp]);
+
   return (
-    <Flex p={10} direction='column'>
+    <Flex p={10} direction='column' w='100%'>
       <VStack mx='auto' spacing={5} mb={8}>
         <Heading>{isSigningUp ? 'Sign Up' : 'Sign In'}</Heading>
         <Text align='center'>
@@ -74,6 +78,21 @@ const SignUser = ({ initialState }) => {
             {isSigningUp ? 'Sign Up' : 'Sign In'} With Google
           </Button>
           <Heading fontSize={'lg'}>Or</Heading>
+          {isSigningUp && (
+            <FormControl>
+              <FormLabel display='none' w='100%'>
+                Name
+              </FormLabel>
+              <Input
+                isDisabled={loading}
+                {...register('name')}
+                type='text'
+                variant='flushed'
+                placeholder='Name'
+                isRequired
+              />
+            </FormControl>
+          )}
           <FormControl w='100%'>
             <FormLabel display='none'>Email</FormLabel>
             <Input
