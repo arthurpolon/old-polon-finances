@@ -28,6 +28,7 @@ import {
 } from 'react-icons/fi';
 import NextLink from 'next/link';
 import { useColors } from '../../contexts/ColorsContext';
+import checkAuth from '../../components/checkAuth';
 import UserInfo from '../../components/UserInfo';
 
 const App = () => {
@@ -45,7 +46,6 @@ const App = () => {
         <Button
           variant='ghost'
           color='white'
-          colorScheme='green'
           _hover='none'
           position='absolute'
           top={10}
@@ -203,4 +203,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default checkAuth(App);
