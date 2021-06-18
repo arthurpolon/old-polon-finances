@@ -34,7 +34,10 @@ function UserInfo(props) {
               <Image
                 borderRadius='full'
                 boxSize={{ base: 8, md: 12 }}
-                src={currentUser?.photoURL || 'https://via.placeholder.com/150'}
+                src={
+                  currentUser?.photoURL ||
+                  'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
+                }
                 alt='Profile Picture'
               />
             </HStack>
