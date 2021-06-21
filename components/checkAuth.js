@@ -17,10 +17,22 @@ import SignUser from './SignUser';
 const checkAuth = (Component) => () => {
   const [user, loading, error] = useAuthState(auth);
   if (loading) {
-    return <Spinner />;
+    return (
+      <Center h='100vh'>
+        <Spinner size='xl' thickness={6} color='green.500' />
+      </Center>
+    );
   }
   if (error) {
-    return <Text>Erro encontrado: {error.message}</Text>;
+    console.log(error);
+    return (
+      <Center h='100vh'>
+        <Text>
+          An error was found: {error.message}. Check console for more
+          information.
+        </Text>
+      </Center>
+    );
   }
 
   if (user) {
