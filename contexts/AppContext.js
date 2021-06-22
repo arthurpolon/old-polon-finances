@@ -1,16 +1,14 @@
 import React, { createContext } from 'react';
-import ColorsContextProvider from './ColorsContext'
-import AuthContextProvider from './AuthContext'
+import ColorsContextProvider from './ColorsContext';
+import AuthContextProvider from './AuthContext';
 
-export const AppContext = createContext()
+export const AppContext = createContext();
 
-function AppContextProvider({children}) {
+function AppContextProvider({ children }) {
   return (
     <AppContext.Provider value={{}}>
       <ColorsContextProvider>
-        <AuthContextProvider>
-          {children}
-        </AuthContextProvider>
+        <AuthContextProvider>{children}</AuthContextProvider>
       </ColorsContextProvider>
     </AppContext.Provider>
   );
