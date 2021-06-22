@@ -24,7 +24,6 @@ import {
   FiDollarSign,
   FiEdit,
   FiTrash2,
-  FiChevronDown,
   FiArrowLeftCircle,
 } from 'react-icons/fi';
 import NextLink from 'next/link';
@@ -33,6 +32,7 @@ import checkAuth from '../../components/checkAuth';
 import UserInfo from '../../components/UserInfo';
 import IncomeModal from './_IncomeModal';
 import ExpenseModal from './_ExpenseModal';
+import FilterPopover from './_FilterPopover';
 
 const App = () => {
   const { colorMode, toggleColorMode } = useColors();
@@ -173,10 +173,7 @@ const App = () => {
             >
               - Add Expense
             </Button>
-            <Button bgColor='white' fontWeight='bold'>
-              Filter
-              <Icon as={FiChevronDown} ml={1} />
-            </Button>
+            <FilterPopover />
           </HStack>
           {/* Table */}
           <Table variant='unstyled' w='100%' mt={6} bg='white' borderRadius={4}>
