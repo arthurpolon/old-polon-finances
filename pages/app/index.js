@@ -8,13 +8,6 @@ import {
   Icon,
   Text,
   Stack,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  VisuallyHidden,
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
@@ -22,8 +15,6 @@ import {
   FiLogIn,
   FiLogOut,
   FiDollarSign,
-  FiEdit,
-  FiTrash2,
   FiArrowLeftCircle,
 } from 'react-icons/fi';
 import NextLink from 'next/link';
@@ -33,6 +24,7 @@ import UserInfo from '../../components/UserInfo';
 import IncomeModal from './_IncomeModal';
 import ExpenseModal from './_ExpenseModal';
 import FilterPopover from './_FilterPopover';
+import TransactionsTable from './_TransactionsTable';
 
 const App = () => {
   const { colorMode, toggleColorMode } = useColors();
@@ -152,7 +144,7 @@ const App = () => {
               </Text>
             </VStack>
           </Stack>
-          {/* Income & Expense Buttons */}
+          {/* Income and Expense Button | Filter Popover */}
           <HStack
             mt={6}
             w={'100%'}
@@ -173,52 +165,11 @@ const App = () => {
             >
               - Add Expense
             </Button>
+            {/* Filter Button */}
             <FilterPopover />
           </HStack>
           {/* Table */}
-          <Table variant='unstyled' w='100%' mt={6} bg='white' borderRadius={4}>
-            <Thead>
-              <Tr>
-                <Th textAlign='center'>Descrição</Th>
-                <Th textAlign='center'>Valor</Th>
-                <Th textAlign='center'>Data</Th>
-                <Th textAlign='center' isNumeric>
-                  <VisuallyHidden>Edit Button</VisuallyHidden>
-                </Th>
-                <Th textAlign='center' isNumeric>
-                  <VisuallyHidden>Delete Button</VisuallyHidden>
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td textAlign='center'>Veterinário Pepeu</Td>
-                <Td textAlign='center' color='red'>
-                  - R$ 100,00
-                </Td>
-                <Td textAlign='center'>18/05/2020</Td>
-                <Td textAlign='center' isNumeric>
-                  <Icon as={FiEdit} h={6} w={6} />
-                </Td>
-                <Td textAlign='center' isNumeric>
-                  <Icon as={FiTrash2} h={7} w={7} color='red' />
-                </Td>
-              </Tr>
-              <Tr>
-                <Td textAlign='center'>Venda salgadinho</Td>
-                <Td textAlign='center' color='green'>
-                  + R$ 50,00
-                </Td>
-                <Td textAlign='center'>20/05/2020</Td>
-                <Td textAlign='center' isNumeric>
-                  <Icon as={FiEdit} h={6} w={6} />
-                </Td>
-                <Td textAlign='center' isNumeric>
-                  <Icon as={FiTrash2} h={7} w={7} color='red' />
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
+          <TransactionsTable />
         </Flex>
       </Box>
       {/* Income Modal */}
