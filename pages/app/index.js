@@ -15,16 +15,7 @@ import {
   Th,
   Td,
   VisuallyHidden,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  Input,
-  FormControl,
-  FormLabel,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import {
@@ -40,11 +31,11 @@ import NextLink from 'next/link';
 import { useColors } from '../../contexts/ColorsContext';
 import checkAuth from '../../components/checkAuth';
 import UserInfo from '../../components/UserInfo';
-import { useForm } from 'react-hook-form';
+import IncomeModal from './_IncomeModal';
+import ExpenseModal from './_ExpenseModal';
 
 const App = () => {
   const { colorMode, toggleColorMode } = useColors();
-  const { register, handleSubmit, reset } = useForm();
   const {
     isOpen: incomeIsOpen,
     onOpen: incomeOnOpen,
@@ -62,17 +53,6 @@ const App = () => {
     }
   }, []);
 
-  const incomeSubmit = ({ incomeDescription, incomeValue, incomeDate }) => {
-    console.log(incomeDescription, incomeValue, incomeDate);
-    incomeOnClose();
-    reset();
-  };
-
-  const expenseSubmit = ({ expenseDescription, expenseValue, expenseDate }) => {
-    console.log(expenseDescription, expenseValue, expenseDate);
-    expenseOnClose();
-    reset();
-  };
   return (
     <>
       <Box minH='100vh' minW='100vw' bg='#ededed'>
@@ -245,139 +225,12 @@ const App = () => {
         </Flex>
       </Box>
       {/* Income Modal */}
-      <Modal isOpen={incomeIsOpen} onClose={incomeOnClose}>
-        <ModalOverlay />
-        <ModalContent bgColor='green.500'>
-          <ModalHeader color='white' textAlign='center' fontSize='3xl'>
-            Add Income
-          </ModalHeader>
-          <ModalCloseButton color='white' />
-          <ModalBody p={8}>
-            <form onSubmit={handleSubmit(incomeSubmit)}>
-              <Flex direction='column'>
-                <VStack spacing={2}>
-                  <FormControl id='description'>
-                    <FormLabel>
-                      <VisuallyHidden>Description</VisuallyHidden>
-                    </FormLabel>
-                    <Input
-                      color='white'
-                      type='text'
-                      placeholder='Description'
-                      variant='flushed'
-                      {...register('incomeDescription')}
-                      _placeholder={{ color: 'gray.200' }}
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl id='value'>
-                    <FormLabel>
-                      <VisuallyHidden>Value</VisuallyHidden>
-                    </FormLabel>
-                    <Input
-                      color='white'
-                      type='number'
-                      placeholder='Value'
-                      variant='flushed'
-                      {...register('incomeValue')}
-                      _placeholder={{ color: 'gray.200' }}
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl id='date'>
-                    <FormLabel>
-                      <VisuallyHidden>Date</VisuallyHidden>
-                    </FormLabel>
-                    <Input
-                      _placeholder={{ color: 'gray.200' }}
-                      color='white'
-                      type='date'
-                      variant='flushed'
-                      {...register('incomeDate')}
-                      isRequired
-                    />
-                  </FormControl>
-                </VStack>
-                <HStack alignSelf='flex-end' mt={8}>
-                  <Button colorScheme='red' mr={3} onClick={incomeOnClose}>
-                    Cancel
-                  </Button>
-                  <Button type='submit' colorScheme='blackAlpha'>
-                    Add
-                  </Button>
-                </HStack>
-              </Flex>
-            </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <IncomeModal incomeIsOpen={incomeIsOpen} incomeOnClose={incomeOnClose} />
       {/* Expense Modal */}
-      <Modal isOpen={expenseIsOpen} onClose={expenseOnClose}>
-        <ModalOverlay />
-        <ModalContent bgColor='red.500'>
-          <ModalHeader color='white' textAlign='center' fontSize='3xl'>
-            Add expense
-          </ModalHeader>
-          <ModalCloseButton color='white' />
-          <ModalBody p={8}>
-            <form onSubmit={handleSubmit(expenseSubmit)}>
-              <Flex direction='column'>
-                <VStack spacing={2}>
-                  <FormControl id='description'>
-                    <FormLabel>
-                      <VisuallyHidden>Description</VisuallyHidden>
-                    </FormLabel>
-                    <Input
-                      color='white'
-                      type='text'
-                      placeholder='Description'
-                      variant='flushed'
-                      {...register('expenseDescription')}
-                      _placeholder={{ color: 'gray.200' }}
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl id='value'>
-                    <FormLabel>
-                      <VisuallyHidden>Value</VisuallyHidden>
-                    </FormLabel>
-                    <Input
-                      color='white'
-                      type='number'
-                      placeholder='Value'
-                      variant='flushed'
-                      {...register('expenseValue')}
-                      _placeholder={{ color: 'gray.200' }}
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl id='date'>
-                    <FormLabel>
-                      <VisuallyHidden>Date</VisuallyHidden>
-                    </FormLabel>
-                    <Input
-                      _placeholder={{ color: 'gray.200' }}
-                      color='white'
-                      type='date'
-                      variant='flushed'
-                      {...register('expenseDate')}
-                      isRequired
-                    />
-                  </FormControl>
-                </VStack>
-                <HStack alignSelf='flex-end' mt={8}>
-                  <Button colorScheme='red' mr={3} onClick={expenseOnClose}>
-                    Cancel
-                  </Button>
-                  <Button type='submit' colorScheme='blackAlpha'>
-                    Add
-                  </Button>
-                </HStack>
-              </Flex>
-            </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ExpenseModal
+        expenseIsOpen={expenseIsOpen}
+        expenseOnClose={expenseOnClose}
+      />
     </>
   );
 };
