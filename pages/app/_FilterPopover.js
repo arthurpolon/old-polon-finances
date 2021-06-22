@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Popover,
   PopoverTrigger,
@@ -15,19 +15,14 @@ import {
   Checkbox,
   Text,
   Input,
-  HStack,
   Link,
   Flex,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
-// import { Container } from './styles';
-
 function FilterPopover() {
-  const [selected, setSelected] = useState([]);
+  const [selectedType, setSelectedType] = useState([]);
   const [dateValue, setDateValue] = useState('');
-
-  console.log(selected, dateValue);
 
   return (
     <Popover placement='right'>
@@ -47,8 +42,9 @@ function FilterPopover() {
                 Filter
               </Heading>
             </PopoverHeader>
-            <PopoverBody>
+            <PopoverBody p={4}>
               <Stack direction='column' spacing={4}>
+                {/* By Type Field */}
                 <Stack direction='column' spacing={2}>
                   <Text fontWeight='bold'>By Type:</Text>
                   <RadioGroup name='filter-radio'>
@@ -58,12 +54,12 @@ function FilterPopover() {
                         colorScheme='green'
                         mr={4}
                         onChange={() => {
-                          if (selected.includes('income')) {
-                            setSelected(
-                              selected.filter((item) => item !== 'income')
+                          if (selectedType.includes('income')) {
+                            setSelectedType(
+                              selectedType.filter((item) => item !== 'income')
                             );
                           } else {
-                            setSelected([...selected, 'income']);
+                            setSelectedType([...selectedType, 'income']);
                           }
                         }}
                       >
@@ -73,12 +69,12 @@ function FilterPopover() {
                         value='expenses'
                         colorScheme='red'
                         onChange={() => {
-                          if (selected.includes('expense')) {
-                            setSelected(
-                              selected.filter((item) => item !== 'expense')
+                          if (selectedType.includes('expense')) {
+                            setSelectedType(
+                              selectedType.filter((item) => item !== 'expense')
                             );
                           } else {
-                            setSelected([...selected, 'expense']);
+                            setSelectedType([...selectedType, 'expense']);
                           }
                         }}
                       >
@@ -87,6 +83,7 @@ function FilterPopover() {
                     </Stack>
                   </RadioGroup>
                 </Stack>
+                {/* ByMonth Field */}
                 <Stack spacing={2}>
                   <Flex justify='space-between'>
                     <Text fontWeight='bold'>By Month:</Text>
@@ -101,7 +98,6 @@ function FilterPopover() {
                       </Link>
                     )}
                   </Flex>
-
                   <Input
                     value={dateValue}
                     onChange={(e) => {
@@ -110,24 +106,6 @@ function FilterPopover() {
                     type='month'
                   />
                 </Stack>
-                {/* <HStack alignSelf='flex-end'>
-                  <Button
-                    colorScheme='red'
-                    mr={3}
-                    size='sm'
-                    onClick={clearFields}
-                  >
-                    Clear
-                  </Button>
-                  <Button
-                    bgColor='transparent'
-                    size='sm'
-                    border='1px solid black'
-                    onClick={onClose}
-                  >
-                    Ok
-                  </Button>
-                </HStack> */}
               </Stack>
             </PopoverBody>
           </PopoverContent>
