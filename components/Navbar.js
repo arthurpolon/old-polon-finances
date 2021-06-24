@@ -48,7 +48,7 @@ export default function Navbar() {
     onClose: signOnClose,
   } = useDisclosure();
 
-  const { currentUser, signOutUser } = useAuth();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     if (currentUser) {
