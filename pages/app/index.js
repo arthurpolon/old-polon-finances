@@ -30,11 +30,14 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const App = () => {
   const { currentUser } = useAuth();
-  const { data, add, update, error, loading } = useCollection('transactions', {
-    where: ['uid', '==', currentUser.uid],
-    orderBy: ['createdAt', 'desc'],
-    listen: true,
-  });
+  const { data, add, deleteDocument, update, error, loading } = useCollection(
+    'transactions',
+    {
+      where: ['uid', '==', currentUser.uid],
+      orderBy: ['createdAt', 'desc'],
+      listen: true,
+    }
+  );
   const { colorMode, toggleColorMode } = useColors();
   const {
     isOpen: incomeIsOpen,
@@ -177,7 +180,11 @@ const App = () => {
             <FilterPopover />
           </HStack>
           {/* Table */}
-          <TransactionsTable transactions={data} loading={loading} />
+          <TransactionsTable
+            transactions={data}
+            deleteDocument={deleteDocument}
+            loading={loading}
+          />
         </Flex>
       </Box>
       {/* Income Modal */}
