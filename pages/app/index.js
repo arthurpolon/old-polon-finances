@@ -18,6 +18,7 @@ import {
   FiArrowLeftCircle,
 } from 'react-icons/fi';
 import NextLink from 'next/link';
+import { useCollection } from '@nandorojo/swr-firestore';
 import { useColors } from '../../contexts/ColorsContext';
 import checkAuth from '../../components/checkAuth';
 import UserInfo from '../../components/UserInfo';
@@ -25,8 +26,15 @@ import IncomeModal from './_IncomeModal';
 import ExpenseModal from './_ExpenseModal';
 import FilterPopover from './_FilterPopover';
 import TransactionsTable from './_TransactionsTable';
+import { useAuth } from '../../contexts/AuthContext';
 
 const App = () => {
+  const { currentUser } = useAuth();
+  const { data, add, update, error, loading } = useCollection('transactions', {
+    where: ['uid', '==', currentUser.uid],
+    orderBy: ['createdAt', 'desc'],
+    listen: true,
+  });
   const { colorMode, toggleColorMode } = useColors();
   const {
     isOpen: incomeIsOpen,
@@ -169,15 +177,20 @@ const App = () => {
             <FilterPopover />
           </HStack>
           {/* Table */}
-          <TransactionsTable />
+          <TransactionsTable transactions={data} loading={loading} />
         </Flex>
       </Box>
       {/* Income Modal */}
-      <IncomeModal incomeIsOpen={incomeIsOpen} incomeOnClose={incomeOnClose} />
+      <IncomeModal
+        incomeIsOpen={incomeIsOpen}
+        incomeOnClose={incomeOnClose}
+        add={add}
+      />
       {/* Expense Modal */}
       <ExpenseModal
         expenseIsOpen={expenseIsOpen}
         expenseOnClose={expenseOnClose}
+        add={add}
       />
     </>
   );
