@@ -15,15 +15,25 @@ import {
   VisuallyHidden,
   VStack,
 } from '@chakra-ui/react';
+import { firebase } from '../../lib/firebase';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../../contexts/AuthContext';
 
 // import { Container } from './styles';
 
-function IncomeModal({ incomeIsOpen, incomeOnClose }) {
+function IncomeModal({ incomeIsOpen, incomeOnClose, add }) {
+  const { currentUser } = useAuth();
   const { register, handleSubmit, reset } = useForm();
 
   const incomeSubmit = ({ incomeDescription, incomeValue, incomeDate }) => {
-    console.log('income: ', incomeDescription, incomeValue, incomeDate);
+    add({
+      description: incomeDescription,
+      value: incomeValue,
+      date: incomeDate,
+      type: 'income',
+      uid: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     incomeOnClose();
     reset();
   };
@@ -63,6 +73,7 @@ function IncomeModal({ incomeIsOpen, incomeOnClose }) {
                     type='number'
                     placeholder='Value'
                     variant='flushed'
+                    step='0.1'
                     {...register('incomeValue')}
                     _placeholder={{ color: 'gray.200' }}
                     isRequired

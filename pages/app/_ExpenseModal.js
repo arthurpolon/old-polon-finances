@@ -15,15 +15,25 @@ import {
   VisuallyHidden,
   VStack,
 } from '@chakra-ui/react';
+import { firebase } from '../../lib/firebase';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../../contexts/AuthContext';
 
 // import { Container } from './styles';
 
-function ExpenseModal({ expenseIsOpen, expenseOnClose }) {
+function ExpenseModal({ expenseIsOpen, expenseOnClose, add }) {
+  const { currentUser } = useAuth();
   const { register, handleSubmit, reset } = useForm();
 
   const expenseSubmit = ({ expenseDescription, expenseValue, expenseDate }) => {
-    console.log('expense: ', expenseDescription, expenseValue, expenseDate);
+    add({
+      description: expenseDescription,
+      value: expenseValue,
+      date: expenseDate,
+      type: 'expense',
+      uid: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     expenseOnClose();
     reset();
   };
