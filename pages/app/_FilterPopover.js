@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Popover,
   PopoverTrigger,
@@ -20,10 +20,12 @@ import {
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
-function FilterPopover() {
-  const [selectedType, setSelectedType] = useState([]);
-  const [dateValue, setDateValue] = useState('');
-
+function FilterPopover({
+  selectedType,
+  setSelectedType,
+  selectedMonth,
+  setSelectedMonth,
+}) {
   return (
     <Popover placement='right'>
       {({ onClose }) => (
@@ -87,21 +89,21 @@ function FilterPopover() {
                 <Stack spacing={2}>
                   <Flex justify='space-between'>
                     <Text fontWeight='bold'>By Month:</Text>
-                    {dateValue && (
+                    {selectedMonth && (
                       <Link
                         color='red'
                         onClick={() => {
-                          setDateValue('');
+                          setSelectedMonth('');
                         }}
                       >
-                        clear date
+                        clear month
                       </Link>
                     )}
                   </Flex>
                   <Input
-                    value={dateValue}
+                    value={selectedMonth}
                     onChange={(e) => {
-                      setDateValue(e.target.value);
+                      setSelectedMonth(e.target.value);
                     }}
                     type='month'
                   />
