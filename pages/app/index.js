@@ -10,7 +10,7 @@ import {
   Stack,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FiLogIn,
   FiLogOut,
@@ -27,9 +27,17 @@ import ExpenseModal from './_ExpenseModal';
 import FilterPopover from './_FilterPopover';
 import TransactionsTable from './_TransactionsTable';
 import { useAuth } from '../../contexts/AuthContext';
+import formatNumberToCurrency from '../../Utils/formatNumberToCurrency';
 
 const App = () => {
+  const [selectedType, setSelectedType] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+  const [incomeCardSum, setIncomeCardSum] = useState(0);
+  const [expenseCardSum, setExpenseCardSum] = useState(0);
+  const [totalCardSum, setTotalCardSum] = useState(0);
   const { currentUser } = useAuth();
+  const { colorMode, toggleColorMode } = useColors();
   const { data, add, deleteDocument, update, error, loading } = useCollection(
     'transactions',
     {
@@ -38,7 +46,6 @@ const App = () => {
       listen: true,
     }
   );
-  const { colorMode, toggleColorMode } = useColors();
   const {
     isOpen: incomeIsOpen,
     onOpen: incomeOnOpen,
@@ -55,6 +62,52 @@ const App = () => {
       toggleColorMode();
     }
   }, []);
+
+  useEffect(() => {
+    setIncomeCardSum(0);
+    setExpenseCardSum(0);
+    setTotalCardSum(0);
+    if (filteredData.length != 0) {
+      filteredData.forEach((data) => {
+        if (data.type === 'income') {
+          setIncomeCardSum(
+            (previousValue) => previousValue + Number(data.value)
+          );
+          setTotalCardSum((total) => total + Number(data.value));
+        } else {
+          setExpenseCardSum(
+            (previousValue) => previousValue + Number(data.value)
+          );
+          setTotalCardSum((total) => total - Number(data.value));
+        }
+      });
+    }
+  }, [filteredData, data]);
+
+  useEffect(() => {
+    if (!loading) {
+      setFilteredData(filterData);
+    }
+  }, [selectedType, selectedMonth, data]);
+
+  const filterData = () => {
+    if (selectedType.length != 0 && selectedMonth) {
+      return data
+        .filter((item) => selectedType.includes(item.type))
+        .filter((item) => item.date.includes(selectedMonth));
+    }
+    if (selectedType.length != 0) {
+      return data.filter((item) => selectedType.includes(item.type));
+    }
+    if (selectedMonth) {
+      return data.filter((item) => item.date.includes(selectedMonth));
+    }
+    return data;
+  };
+
+  if (error) {
+    console.log(error);
+  }
 
   return (
     <>
@@ -114,9 +167,11 @@ const App = () => {
                 </Text>
                 <Icon as={FiLogIn} color='green' w={6} h={6} />
               </HStack>
-              <Text fontSize={{ base: '3xl', md: '4xl' }}>R$ 50,00</Text>
+              <Text fontSize={{ base: '3xl', md: '4xl' }}>
+                {formatNumberToCurrency(incomeCardSum)}
+              </Text>
             </VStack>
-            {/* Outcome Card  */}
+            {/* Expense Card  */}
             <VStack
               bg='white'
               p={{ base: 25, md: 35 }}
@@ -130,7 +185,9 @@ const App = () => {
                 </Text>
                 <Icon as={FiLogOut} color='red' w={6} h={6} />
               </HStack>
-              <Text fontSize={{ base: '3xl', md: '4xl' }}>R$ 100,00</Text>
+              <Text fontSize={{ base: '3xl', md: '4xl' }}>
+                {formatNumberToCurrency(expenseCardSum)}
+              </Text>
             </VStack>
             {/* Total Card */}
             <VStack
@@ -151,7 +208,7 @@ const App = () => {
                 color='white'
                 isTruncated
               >
-                R$ -50,00
+                {formatNumberToCurrency(totalCardSum)}
               </Text>
             </VStack>
           </Stack>
@@ -177,11 +234,16 @@ const App = () => {
               - Add Expense
             </Button>
             {/* Filter Button */}
-            <FilterPopover />
+            <FilterPopover
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+            />
           </HStack>
           {/* Table */}
           <TransactionsTable
-            transactions={data}
+            transactions={filteredData}
             deleteDocument={deleteDocument}
             loading={loading}
           />
