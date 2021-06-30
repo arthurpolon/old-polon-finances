@@ -26,6 +26,7 @@ import {
 import { format } from 'date-fns';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import { deleteDocument } from '@nandorojo/swr-firestore';
+import formatNumberToCurrency from '../../Utils/formatNumberToCurrency';
 
 function TransactionsTable({ transactions, loading }) {
   const [modalInfo, setModalInfo] = useState({});
@@ -39,11 +40,8 @@ function TransactionsTable({ transactions, loading }) {
     return format(new Date(date), 'dd/MM/yyyy');
   };
 
-  const formatNumberToCurrency = (number, type) => {
-    const currency = Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(number);
+  const addSignAndCurrency = (number, type) => {
+    const currency = formatNumberToCurrency(number);
 
     const sign = type == 'income' ? '+' : '-';
 
@@ -102,7 +100,7 @@ function TransactionsTable({ transactions, loading }) {
                   textAlign='center'
                   color={transaction.type === 'expense' ? 'red' : 'green'}
                 >
-                  {formatNumberToCurrency(transaction.value, transaction.type)}
+                  {addSignAndCurrency(transaction.value, transaction.type)}
                 </Td>
                 <Td textAlign='center'>{formatDate(transaction.date)}</Td>
                 <Td textAlign='center' isNumeric>
@@ -130,11 +128,12 @@ function TransactionsTable({ transactions, loading }) {
         </Tbody>
       </Table>
 
+      {/* Delete Modal */}
       <Modal isOpen={deleteIsOpen} onClose={deleteOnClose}>
         <ModalOverlay />
         <ModalContent backgroundColor='red.500' color='white'>
           <ModalHeader fontSize='3xl' fontWeight='medium' textAlign='center'>
-            Tem certeza que deseja excluir:
+            Are you sure you want to delete:
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
